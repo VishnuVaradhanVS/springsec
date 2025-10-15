@@ -2,6 +2,7 @@ package com.example.springSecurity.controller;
 
 import com.example.springSecurity.model.User;
 import com.example.springSecurity.service.UserService;
+import com.example.springSecurity.util.UserNameAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,13 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public User addNewUser(@RequestBody User user){
-        return userService.addUser(user);
+    public String addNewUser(@RequestBody User user){
+        try {
+            userService.addUser(user);
+        }
+        catch (UserNameAlreadyExists e){
+            return "Username already exists";
+        }
+        return user.toString();
     }
 }
