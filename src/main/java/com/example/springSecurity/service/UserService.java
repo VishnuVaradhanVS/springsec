@@ -4,6 +4,7 @@ import com.example.springSecurity.model.User;
 import com.example.springSecurity.repository.UserRepo;
 import com.example.springSecurity.util.UserNameAlreadyExists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public class UserService {
         if(u!=null){
             throw new UserNameAlreadyExists();
         }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        user.setPassword(encoder.encode(user.getPassword()));
         return userRepo.save(user);
     }
     public List<User> findAllUsers(){
